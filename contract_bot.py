@@ -9,7 +9,7 @@ import time
 from pprint import pprint
 
 
-# Check to see if this is a comment we want to perform an action on
+# Check to see if this is a comment we want to perform an action on and returns the appropriate index.
 def check_conditions(com):
     text = com.body
     tokens = text.split()
@@ -24,15 +24,30 @@ def check_conditions(com):
 def bot_action(com, ind):
     text = com.body
     tokens = text.split()
-    player_name = tokens[ind + 1] + " " + tokens[ind + 2]
-    print(player_name)
-    call_general_fanager_api(player_name)
+    player_name = tokens[ind + 1] + " " + tokens[ind + 2]  # Combine the first and last name of a player.
+    print(player_name)  # Debug.
+    result = call_general_fanager_api(player_name=player_name)
+    readable_message = build_response(api_result=result)
+    send_response(readable_message)
     return
 
 
-# Sends the API request to General Fanager.
+# Sends the API request to General Fanager and returns the result.
 def call_general_fanager_api(player_name):
     # TODO implement this once we get access to General Fanager's public API.
+    api_result = ""
+    return api_result
+
+
+# Builds a human/reddit readable comment to be submitted back to the user.
+def build_response(api_result):
+    # TODO implement once we know how General Fanager handles it's data.
+    return
+
+
+# Sends and posts the finished message back to the user.
+def send_response(complete_message):
+    # TODO once build_response is complete.
     return
 
 VER_NUM = 0.1
@@ -52,11 +67,12 @@ subreddit = r.get_subreddit('hockey')
 
 keyWords = ['!contract-bot', '!contract_bot']  # These are the keywords we'll look for when searching comments.
 
-for comment in praw.helpers.comment_stream(r, subreddit):
-    key_token = check_conditions(comment)
+# This should read in all new comments indefinitely from /r/hockey.
+for comment in praw.helpers.comment_stream(reddit_session=r, subreddit=subreddit):
+    key_token = check_conditions(com=comment)
 
     if key_token is not None:
-        bot_action(comment, key_token)
+        bot_action(com=comment, ind=key_token)
 
 # TODO Solve the three bot problems:
 
@@ -66,9 +82,7 @@ for comment in praw.helpers.comment_stream(r, subreddit):
 
 # Running continually:
 # We probably don't care if Reddit crashes. We won't be holding onto any important information. If Reddit crashes then
-# it is OK that our bot crashes as well.
+# it is probably OK that our bot crashes as well. However we'll have to figure out how to handle a restart.
 
 # Keeping within API guidelines:
 # PRAW should handle this for us. Be sure to read the API guidelines, etc.
-
-
