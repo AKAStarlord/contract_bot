@@ -60,8 +60,6 @@ user = r.get_redditor(user_name)
 
 r.login()  # TODO This function is depreciated.
 
-thing_limit = 10  # TODO This is a temporary measure during development.
-
 # For now we are only interested in /r/hockey. In future versions I'd like to expand to NHL team subreddits.
 subreddit = r.get_subreddit('hockey')
 
